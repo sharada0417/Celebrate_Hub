@@ -1,13 +1,12 @@
-import './App.css'
-import Home from './Home'
+import Navigation from "./components/Navigation";
 
-function App() {
+const App = () => {
 
   return (
     <>
-      <Home/>
+      <Navigation/>
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
