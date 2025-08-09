@@ -3,6 +3,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
 function Hero(){
+   return(
  <div className="">
     {/*Hero content*/}
     <div className="relative z-10 flex flex-col items-center text-white justify-center px-8 pt-32 pb32">
@@ -28,12 +29,13 @@ function Hero(){
          >
             <Sparkles
                style={{ width: "20px" , height:"20px"}}
-               className="mr-2 animate-pulse text-sky-400"
+               className="mr-2 animate-pulse text-orange-600"
             />
             <span className="lg:text-lg">AI Search</span>
          </Button>
       </form>
     </div>
  </div>
+   )
 }
 export default Hero;

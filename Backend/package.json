@@ -1,0 +1,15 @@
+{
+  "name": "celebratehub",
+  "version": "1.0.0",
+  "description": "party booking platform",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node src/index.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
