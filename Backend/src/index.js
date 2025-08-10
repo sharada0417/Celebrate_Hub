@@ -3,6 +3,7 @@ import ConnectedDB from './infrastructure/db.js';
 import dotenv from "dotenv";
 import usersRouter from './api/user.js';
 import placesRouter from './api/places.js';
+import bookingRouter from './api/booking.js';
 dotenv.config();
 
 const celebratePlaces = [
@@ -175,6 +176,7 @@ ConnectedDB();
 
 app.use("/api/users",usersRouter);
 app.use("/api/places",placesRouter);
+app.use("/api/booking",bookingRouter);
 
 const PORT = 5000;
 app.listen(5000,

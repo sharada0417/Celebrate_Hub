@@ -1,4 +1,5 @@
-import Booking from "../infrastructure/schemas/Booking";
+import Booking from "../infrastructure/schemas/Booking.js"
+
 
 export const createBooking = async (req,res) => {
     const booking = req.body;
@@ -26,5 +27,18 @@ export const createBooking = async (req,res) => {
 
     //Return the response
     res.status(201).send();
+    return;
+}
+
+export const getAllBookingForPlace = async (req,res) => {
+    const placeId = req.params.placeId;
+    const booking = await Booking.find({placeId:placeId}).populate("userId");
+
+    res.status(200).json(booking);
+    return;
+}
+export const getAllBookings = async (req,res) => {
+    const places = await Booking.find();
+    res.status(200).json(places);
     return;
 }
