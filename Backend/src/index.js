@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import ConnectedDB from './infrastructure/db.js';
 import dotenv from "dotenv";
 import usersRouter from './api/user.js';
@@ -172,6 +173,7 @@ const celebratePlaces = [
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 ConnectedDB();
 
 app.use("/api/users",usersRouter);
