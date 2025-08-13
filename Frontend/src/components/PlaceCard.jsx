@@ -3,8 +3,8 @@ import React from "react";
 
 const PlaceCard = (props) => {
   return (
-    <div key={props.places._id} className="block group relative">
-      <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
+    <div key={props.places._id} className="block group relative bg-white rounded-xl shadow-md p-4 min-h-[400px]">
+      <div className="relative h-56 overflow-hidden rounded-xl">
         <img
           src={props.places.image}
           alt={props.places.name}

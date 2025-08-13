@@ -1,4 +1,0 @@
-//connection string
-//mongodb+srv://sharadakanchana417:R2WJXjNhZtimcDJG@cluster0.9lw4u1n.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-//password
-//R2WJXjNhZtimcDJG
