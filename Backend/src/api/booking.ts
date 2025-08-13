@@ -1,5 +1,5 @@
 import express from 'express'
-import { createBooking, getAllBookingForPlace, getAllBookings } from '../application/Booking.js';
+import { createBooking, getAllBookingForPlace, getAllBookings } from '../application/Booking';
 
 const bookingRouter = express.Router();
 bookingRouter.route("/").post(createBooking).get(getAllBookings);
