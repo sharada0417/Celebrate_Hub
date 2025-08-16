@@ -1,9 +1,12 @@
 import { MapPin, Star } from "lucide-react";
 import React from "react";
+import { Link } from "react-router";
 
 const PlaceCard = (props) => {
   return (
-    <div key={props.places._id} className="block group relative bg-white rounded-xl shadow-md p-4 min-h-[400px]">
+
+    <Link 
+      to={`/places/${props.places._id}`}>
       <div className="relative h-56 overflow-hidden rounded-xl">
         <img
           src={props.places.image}
@@ -29,7 +32,7 @@ const PlaceCard = (props) => {
           <span className="text-xl font-bold">${props.places.price}</span>
         </div>
       </div>
-    </div>
+      </Link>
   );
 };
 

@@ -4,7 +4,7 @@ import LocationTab from "./LocationTab";
 import { useGetPlacesQuery } from "../lib/api";
 
 function PlaceListing() {
-  const { data: places = [], isLoading, isError, error } = useGetPlacesQuery();
+  const { data: places , isLoading, isError, error } = useGetPlacesQuery();
   const locations = ["ALL", "Maldives", "UAE", "Italy", "Europe", "Tanzania"];
 
   const [selectedLocation, setSelectedLocation] = useState("ALL");

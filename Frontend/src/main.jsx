@@ -11,6 +11,7 @@ import SignUpPage from "./pages/sign-up.page";
 import Signinpage from "./pages/sign-in.page";
 import { Provider } from "react-redux";
 import { store } from "./lib/store";
+import CreateHotelPage from "./pages/create-hotel.page";
 
 
 createRoot(document.getElementById("root")).render(
@@ -25,7 +26,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="/" element={<Homepage />} />
             <Route path="/places" element={<Placespage />} />
             <Route path="/places/:id" element={<Placepage />} />
-            <Route path="/places/create" element={<Placepage />} />
+            <Route path="/places/create" element={<CreateHotelPage />} />
           </Route>
 
           {/* Auth routes (not inside Mainlayout) */}

@@ -13,7 +13,7 @@ function Navigation() {
         <Link to={`/`} className="transition-colors hover:text-orange-900">
           Home
         </Link>
-        <Link to={`/places/:id`} className="transtion-colors">
+        <Link to={`/places`} className="transtion-colors">
           Place
         </Link>
       </div>
