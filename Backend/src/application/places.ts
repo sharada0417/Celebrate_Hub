@@ -29,45 +29,39 @@ export const getPlaceById = async (req : Request ,res :Response ,next :NextFunct
     }
 }
 
-export const createPlace = async (req : Request,res:Response , next : NextFunction) => {
-    try {
-        const place = req.body;
+export const createPlace = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const place = req.body;
 
-    //validate the request data
-    if(
-        !place.name ||
-        !place.location ||
-        !place.suitableFor ||
-        !place.image ||
-        !place.description ||
-        !place.rating ||
-        !place.reviews ||
-        !place.price ||
-        !place.services 
+    // Validate the request data
+    if (
+      !place.name ||
+      !place.location ||
+      !place.suitableFor ||
+      !place.image ||
+      !place.description ||
+      !place.price ||
+      !place.services
     ) {
-        throw new ValidationError("Invalid place data");
+      throw new ValidationError("Invalid place data");
     }
 
-    //Add the hotel
-    await Place.create({
-        name : place.name,
-        location : place.location,
-        image :place.image,
-        description:place.description,
-        suitableFor : place.suitableFor,
-        rating: parseFloat(place.rating),
-        reviews : parseFloat(place.reviews),
-        price : parseInt(place.price),
-        services: place.services
+    // Add the place
+    const newPlace = await Place.create({
+      name: place.name,
+      location: place.location,
+      image: place.image,
+      description: place.description,
+      suitableFor: place.suitableFor,
+      price: parseInt(place.price),
+      services: place.services,
     });
 
-        //return the response
-        res.status(201).send();
-        return;
-    } catch (error) {
-        next(error);
-    }
-}
+    res.status(201).json({ success: true, data: newPlace });
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const deletePlace = async (req : Request,res:Response ,next :NextFunction) => {
     try {

@@ -1,10 +1,10 @@
-import React from 'react'
+import { SignUp } from '@clerk/clerk-react'
 
 const SignUppage = () => {
   return (
-    <div>
-      <h1>Sign Up</h1>
-    </div>
+    <main className='flex items-center justify-center min-h-screen px-4'>
+        <SignUp/>
+    </main>
   )
 }
 
