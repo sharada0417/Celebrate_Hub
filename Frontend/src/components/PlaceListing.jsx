@@ -1,38 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import PlaceCard from "./PlaceCard";
 import LocationTab from "./LocationTab";
-import { getPlaces } from "../lib/api/api.js";
+import { useGetPlacesQuery } from "../lib/api";
 
 function PlaceListing() {
+  const { data: places = [], isLoading, isError, error } = useGetPlacesQuery();
   const locations = ["ALL", "Maldives", "UAE", "Italy", "Europe", "Tanzania"];
 
   const [selectedLocation, setSelectedLocation] = useState("ALL");
-  const [places, setPlaces] = useState([]); 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [isError, setIsError] = useState(false);
 
   const handleSelectedLocation = (location) => {
     setSelectedLocation(location);
   };
-
-  useEffect(() => {
-    setLoading(true);
-    setIsError(false);
-    setError("");
-
-    getPlaces()
-      .then((data) => {
-        setPlaces(data);
-      })
-      .catch((error) => {
-        setIsError(true);
-        setError(error.message);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
 
   const filteredHotels =
     selectedLocation === "ALL"
@@ -41,7 +20,7 @@ function PlaceListing() {
           place.location.toLowerCase().includes(selectedLocation.toLowerCase())
         );
 
-  if (loading) {
+  if (isLoading) {
     return (
       <section className="px-8 py-8 lg:py-2">
         <div className="mb-5">
@@ -90,7 +69,7 @@ function PlaceListing() {
             />
           ))}
         </div>
-        <div className="text-red-500">{error}</div>
+        <div className="text-red-500">{error?.message || "Something went wrong"}</div>
       </section>
     );
   }

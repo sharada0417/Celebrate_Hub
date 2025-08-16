@@ -1,27 +1,41 @@
-import express from 'express';
-import cors from 'cors';
-import ConnectedDB from './infrastructure/db';
+import express, { Application } from "express";
+import cors from "cors";
 import dotenv from "dotenv";
-import usersRouter from './api/user';
-import placesRouter from './api/places';
-import bookingRouter from './api/booking';
-import GlobalErrorHandlingMiddleware from './api/middleware/global-error-handling-middleware';
+import ConnectedDB from "./infrastructure/db";
+import usersRouter from "./api/user";
+import placesRouter from "./api/places";
+import bookingRouter from "./api/booking";
+import GlobalErrorHandlingMiddleware from "./api/middleware/global-error-handling-middleware";
 
 dotenv.config();
 
-const app = express();
+const app: Application = express();
+
+// Parse JSON requests
 app.use(express.json());
-app.use(cors());
+
+// CORS middleware (must be before routes)
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+
 ConnectedDB();
 
-app.use("/api/users",usersRouter);
-app.use("/api/places",placesRouter);
-app.use("/api/booking",bookingRouter);
+// Routes
+app.use("/api/users", usersRouter);
+app.use("/api/places", placesRouter);
+app.use("/api/booking", bookingRouter);
+
 
 app.use(GlobalErrorHandlingMiddleware);
 
-const PORT = 6000;
-app.listen(PORT , () => 
-  console.log(`Server is running on port ${PORT}....`)
-);
-
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`🚀 Server is running on http://localhost:${PORT}`);
+});

@@ -18,24 +18,24 @@ export default ConnectedDB;
 
 // const celebratePlaces = [
 //   {
-//     _id: "1",
-//     name: "Sunset Soirée Beach",
-//     location: "Maldives",
-//     suitableFor: ["Engagement", "Wedding", "Surprise Party"],
-//     image:
-//       "https://www.paperlesspost.com/blog/wp-content/uploads/00_16BeachBirthdyIdeas_Hero.png",
-//     description:
-//       "A serene white-sand beach venue that glows at sunset, perfect for romantic proposals, intimate weddings, or surprise celebrations. Natural ambiance and ocean backdrop set the mood.",
-//     rating: 4.9,
-//     reviews: 120,
-//     price: 1500,
-//     services: [
-//       "Food Service",
-//       "Guest Rooms",
-//       "Bar Service",
-//       "Photography",
-//       "Live Music",
-//     ],
+    // _id: "1",
+    // name: "Sunset Soirée Beach",
+    // location: "Maldives",
+    // suitableFor: ["Engagement", "Wedding", "Surprise Party"],
+    // image:
+    //   "https://www.paperlesspost.com/blog/wp-content/uploads/00_16BeachBirthdyIdeas_Hero.png",
+    // description:
+    //   "A serene white-sand beach venue that glows at sunset, perfect for romantic proposals, intimate weddings, or surprise celebrations. Natural ambiance and ocean backdrop set the mood.",
+    // rating: 4.9,
+    // reviews: 120,
+    // price: 1500,
+    // services: [
+    //   "Food Service",
+    //   "Guest Rooms",
+    //   "Bar Service",
+    //   "Photography",
+    //   "Live Music",
+    // ],
 //   },
 //   {
 //     _id: "2",
