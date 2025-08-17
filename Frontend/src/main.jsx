@@ -17,6 +17,7 @@ import ProtectedLayout from "./Layout/protected.layout";
 import AccountPage from "./pages/account.page";
 import CreatePlaceForm from "./components/CreatePlaceForm";
 import CreatePlacePage from "./pages/create-place.page";
+import AdminProtectedLayout from "./Layout/admin-layout";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -40,7 +41,9 @@ createRoot(document.getElementById("root")).render(
               {/* Protected routes */}
               <Route element={<ProtectedLayout />}>
                 <Route path="/account" element={<AccountPage />} />
+                <Route element={<AdminProtectedLayout/>}>
                 <Route path="/places/create" element={<CreatePlacePage/>} />
+                </Route>
               </Route> 
               </Route>
 

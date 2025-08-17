@@ -3,7 +3,15 @@ const BACKEND_URL = "http://localhost:8080";
 
 export const api = createApi({
   reducerPath : "api",
-  baseQuery:fetchBaseQuery({ baseUrl : `${BACKEND_URL}/api/`}),
+  baseQuery:fetchBaseQuery({ 
+    baseUrl : `${BACKEND_URL}/api/`,
+    prepareHeaders:async (headers,{getState})=>{
+      const token = await window?.Clerk?.session?.getToken();
+      if(token){
+        headers.set(`Authorization`,`Bearer ${token}`);
+      }
+    }
+  }),
   endpoints:(builder)=>({
     getPlaces: builder.query({
       query:()=>"places/"

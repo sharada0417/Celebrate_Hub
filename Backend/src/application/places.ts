@@ -1,7 +1,7 @@
 import { Request,Response,NextFunction } from "express";
 import Place from "../infrastructure/schemas/places"
-import NotFoundError from "../domain/not-found-error";
-import ValidationError from "../domain/validation-error";
+import NotFoundError from "../domain/errors/not-found-error";
+import ValidationError from "../domain/errors/validation-error";
 
 export const  getAllPlaces = async (req : Request ,res :Response ,next :NextFunction) => {
     try {

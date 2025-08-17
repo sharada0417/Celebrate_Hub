@@ -6,13 +6,15 @@ import usersRouter from "./api/user";
 import placesRouter from "./api/places";
 import bookingRouter from "./api/booking";
 import GlobalErrorHandlingMiddleware from "./api/middleware/global-error-handling-middleware";
-
+import {clerkMiddleware } from '@clerk/express'
 dotenv.config();
 
 const app: Application = express();
 
 // Parse JSON requests
 app.use(express.json());
+
+app.use(clerkMiddleware());
 
 // CORS middleware (must be before routes)
 app.use(

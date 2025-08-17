@@ -1,6 +1,6 @@
 import { Request,Response,NextFunction } from "express";
 import User from "../infrastructure/schemas/user";
-import ValidationError from "../domain/validation-error";
+import ValidationError from "../domain/errors/validation-error";
 
 export const createUser = async (req : Request ,res :Response , next :NextFunction) => {
     try {

@@ -1,9 +1,10 @@
 import { Globe } from "lucide-react";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
-import { SignedIn, SignedOut, SignOutButton, UserButton } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, SignOutButton, UserButton, useUser } from "@clerk/clerk-react";
 
 function Navigation() {
+  const { user } = useUser();
   return (
     <nav className="z-10 bg-orange-500 flex items-center justify-between px-8 text-white py-4">
       {/* Left side - Logo and Links */}
@@ -13,11 +14,11 @@ function Navigation() {
         </Link>
         
         <div className="hidden md:flex space-x-3 mr-5">
-          <SignedIn>
-          <Link to={`/places/create`} className="transition-colors hover:text-orange-900">
+          {user?.publicMetadata?.role === "data"  && (<Link to={`/places/create`} className="transition-colors hover:text-white">
             Create Place
-          </Link>
-          </SignedIn>
+          </Link>)}
+          
+          
         </div>
       </div>
       
@@ -48,12 +49,6 @@ function Navigation() {
             <Link to="/account">My Account</Link>
           </Button>
 
-          {/* Sign out button */}
-          <SignOutButton>
-            <Button variant="ghost" className="text-white">
-              Log Out
-            </Button>
-          </SignOutButton>
         </SignedIn>
       </div>
     </nav>
