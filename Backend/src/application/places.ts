@@ -2,6 +2,8 @@ import { Request,Response,NextFunction } from "express";
 import Place from "../infrastructure/schemas/places"
 import NotFoundError from "../domain/errors/not-found-error";
 import ValidationError from "../domain/errors/validation-error";
+import { CreatePlaceDTO } from "../domain/dtos/place";
+import OpenAI from "openai";
 
 export const  getAllPlaces = async (req : Request ,res :Response ,next :NextFunction) => {
     try {
@@ -31,33 +33,24 @@ export const getPlaceById = async (req : Request ,res :Response ,next :NextFunct
 
 export const createPlace = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const place = req.body;
+    const place = CreatePlaceDTO.safeParse(req.body);
 
-    // Validate the request data
-    if (
-      !place.name ||
-      !place.location ||
-      !place.suitableFor ||
-      !place.image ||
-      !place.description ||
-      !place.price ||
-      !place.services
-    ) {
-      throw new ValidationError("Invalid place data");
+    if(!place.success){
+        throw new ValidationError(place.error.message);
     }
 
     // Add the place
-    const newPlace = await Place.create({
-      name: place.name,
-      location: place.location,
-      image: place.image,
-      description: place.description,
-      suitableFor: place.suitableFor,
-      price: parseInt(place.price),
-      services: place.services,
+     await Place.create({
+      name: place.data.name,
+      location: place.data.location,
+      image: place.data.image,
+      description: place.data.description,
+      suitableFor: place.data.suitableFor,
+      price: parseInt(place.data.price),
+      services: place.data.services,
     });
 
-    res.status(201).json({ success: true, data: newPlace });
+    res.status(201).send();
   } catch (error) {
     next(error);
   }
@@ -104,4 +97,35 @@ export const updateHotel = async (req:Request,res:Response,next:NextFunction) =>
     } catch (error) {
         next(error);
     }
+}
+
+export const generateResponse = async (req:Request,res:Response,next:NextFunction) => {
+    const {messages } = req.body;
+
+    const openai = new OpenAI({
+        apiKey:process.env.OPENAI_API_KEY,
+    });
+
+    const completion = await openai.chat.completions.create({
+        model:"gpt-4o",
+        messages:
+            messages.length === 1
+            ? [
+            {
+                role:"system",
+                content:"You are Celebrate Hubs smart party booking assistant, helping users quickly find, compare, and book the perfect venues and services for birthdays, weddings, and special celebrations. ", 
+            },
+            ...messages,
+        ]
+        : messages,
+        store:true,
+    });
+
+    res.status(200).json({ 
+        messages : [
+            ...messages,
+            { role : "assistant",content:completion.choices[0].message.content}
+        ]
+    });
+    return;
 }

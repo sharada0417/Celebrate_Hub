@@ -20,6 +20,13 @@ function Navigation() {
           
           
         </div>
+        <div className="hidden md:flex space-x-3 mr-5">
+          <Link to={`/aboutus`} className="transition-colors hover:text-white">
+            About Us
+          </Link>
+          
+          
+        </div>
       </div>
       
       {/* Right side - Language & Authentication */}
