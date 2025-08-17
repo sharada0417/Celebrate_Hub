@@ -39,7 +39,7 @@ createRoot(document.getElementById("root")).render(
                 <Route path="/" element={<Homepage />} />
                 <Route path="/places" element={<Placespage />} />
                 <Route path="/places/:id" element={<Placepage />} />
-                <Route path="/" element={<AboutUsPage />} />
+                <Route path="/aboutus" element={<AboutUsPage />} />
               {/* Protected routes */}
               <Route element={<ProtectedLayout />}>
                 <Route path="/account" element={<AccountPage />} />
