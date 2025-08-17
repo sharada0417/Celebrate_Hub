@@ -1,24 +1,27 @@
 import { useState } from "react";
+import { Hotel } from "lucide-react"; // Added Hotel icon
 import PlaceCard from "./PlaceCard";
-import LocationTab from "./LocationTab";
-import { useGetPlacesQuery } from "../lib/api";
+import { useGetPlaceForSerchQueryQuery, useGetPlacesQuery } from "../lib/api";
+import { useSelector } from "react-redux";
 
 function PlaceListing() {
-  const { data: places , isLoading, isError, error } = useGetPlacesQuery();
-  const locations = ["ALL", "Maldives", "UAE", "Italy", "Europe", "Tanzania"];
+  const searchValue = useSelector((state) => state.search.value);
+  const { data: allPlaces, isLoading: isAllLoading, isError: isAllError, error: allError } = useGetPlacesQuery({
+    skip: !!searchValue,
+  });
+  const { data: searchPlaces, isLoading: isSearchLoading, isError: isSearchError, error: searchError } = useGetPlaceForSerchQueryQuery(
+    { query: searchValue },
+    { skip: !searchValue }
+  );
 
-  const [selectedLocation, setSelectedLocation] = useState("ALL");
+  // Map search results to ensure correct structure
+  const places = searchValue
+    ? (searchPlaces || []).map((item) => item.place).filter((place) => place && place._id) // Ensure valid place and _id
+    : allPlaces || [];
 
-  const handleSelectedLocation = (location) => {
-    setSelectedLocation(location);
-  };
-
-  const filteredHotels =
-    selectedLocation === "ALL"
-      ? places
-      : places.filter((place) =>
-          place.location.toLowerCase().includes(selectedLocation.toLowerCase())
-        );
+  const isLoading = searchValue ? isSearchLoading : isAllLoading;
+  const isError = searchValue ? isSearchError : isAllError;
+  const error = searchValue ? searchError : allError;
 
   if (isLoading) {
     return (
@@ -31,18 +34,10 @@ function PlaceListing() {
             Find the perfect location for your next celebration, from intimate gatherings to grand parties.
           </p>
         </div>
-
-        <div className="flex items-center gap-x-4 mb-12">
-          {locations.map((location) => (
-            <LocationTab
-              key={location}
-              selectedLocation={selectedLocation}
-              name={location}
-              onClick={handleSelectedLocation}
-            />
-          ))}
+        <div className="flex items-center justify-center gap-x-2 text-red-500">
+          <Hotel className="h-5 w-5" /> {/* Added hotel icon */}
+          <span>Creating thing</span>
         </div>
-        <div className="text-red-500">Loading...</div>
       </section>
     );
   }
@@ -58,18 +53,9 @@ function PlaceListing() {
             Find the perfect location for your next celebration, from intimate gatherings to grand parties.
           </p>
         </div>
-
-        <div className="flex items-center gap-x-4 mb-12">
-          {locations.map((location) => (
-            <LocationTab
-              key={location}
-              selectedLocation={selectedLocation}
-              name={location}
-              onClick={handleSelectedLocation}
-            />
-          ))}
+        <div className="text-red-500">
+          {searchValue ? `No results found for "${searchValue}"` : error?.message || "Something went wrong"}
         </div>
-        <div className="text-red-500">{error?.message || "Something went wrong"}</div>
       </section>
     );
   }
@@ -85,21 +71,16 @@ function PlaceListing() {
         </p>
       </div>
 
-      <div className="flex items-center gap-x-4 mb-12">
-        {locations.map((location, i) => (
-          <LocationTab
-            key={i}
-            selectedLocation={selectedLocation}
-            name={location}
-            onClick={handleSelectedLocation}
-          />
-        ))}
-      </div>
-
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-4">
-        {filteredHotels.map((place) => (
-          <PlaceCard key={place._id} places={place} />
-        ))}
+        {places.length > 0 ? (
+          places.map((place) => (
+            <PlaceCard key={place._id} places={place} />
+          ))
+        ) : (
+          <div className="text-gray-500 col-span-full text-center">
+            {searchValue ? `No hotels found for "${searchValue}"` : "No hotels available"}
+          </div>
+        )}
       </div>
     </section>
   );

@@ -12,11 +12,8 @@ export const createBooking = async (req: Request, res: Response, next: NextFunct
       throw new ValidationError(booking.error.message);
     }
 
-    // ✅ Updated req.auth usage
-    const authData = req.auth?.(); // call as function
-    if (!authData || !authData.userId) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
+    const authData = req.auth;
+    
 
     // Add the booking
     await Booking.create({

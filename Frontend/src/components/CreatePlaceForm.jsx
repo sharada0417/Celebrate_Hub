@@ -91,185 +91,215 @@ const CreatePlaceForm = () => {
   };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(handleSubmit)}
-        className="w-1/2 space-y-6"
-      >
-        {/* Name */}
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Place Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter place name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-b">
+      <div className="w-full max-w-2xl bg-white shadow-xl rounded-2xl p-8 border border-orange-200">
+        <h2 className="text-3xl font-bold text-center mb-6 text-orange-600">
+          Create a Place
+        </h2>
 
-        {/* Location */}
-        <FormField
-          control={form.control}
-          name="location"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Location</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter location" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-6"
+          >
+            {/* Name */}
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-orange-700">Place Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter place name"
+                      className="focus:ring-orange-500"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        {/* Image */}
-        <FormField
-          control={form.control}
-          name="image"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Image URL</FormLabel>
-              <FormControl>
-                <Input placeholder="https://example.com/image.jpg" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            {/* Location */}
+            <FormField
+              control={form.control}
+              name="location"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-orange-700">Location</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter location"
+                      className="focus:ring-orange-500"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        {/* Description */}
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Description</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Write a short description..."
-                  rows={4}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            {/* Image */}
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-orange-700">Image URL</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="https://example.com/image.jpg"
+                      className="focus:ring-orange-500"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        {/* Price */}
-        <FormField
-          control={form.control}
-          name="price"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Price ($)</FormLabel>
-              <FormControl>
-                <Input type="number" placeholder="Enter price" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            {/* Description */}
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-orange-700">Description</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Write a short description..."
+                      rows={4}
+                      className="focus:ring-orange-500"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        {/* Suitable For (multi-select with badges) */}
-        <FormField
-          control={form.control}
-          name="suitableFor"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Suitable For</FormLabel>
-              <Select
-                onValueChange={(val) =>
-                  !field.value.includes(val) &&
-                  field.onChange([...field.value, val])
-                }
-              >
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select events" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {suitableForOptions.map((opt) => (
-                    <SelectItem key={opt} value={opt}>
-                      {opt}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <div className="flex flex-wrap gap-2 mt-2">
-                {field.value.map((item, idx) => (
-                  <Badge
-                    key={idx}
-                    onClick={() =>
-                      field.onChange(field.value.filter((v) => v !== item))
+            {/* Price */}
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-orange-700">Price ($)</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="Enter price"
+                      className="focus:ring-orange-500"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Suitable For */}
+            <FormField
+              control={form.control}
+              name="suitableFor"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-orange-700">Suitable For</FormLabel>
+                  <Select
+                    onValueChange={(val) =>
+                      !field.value.includes(val) &&
+                      field.onChange([...field.value, val])
                     }
-                    className="cursor-pointer"
                   >
-                    {item} ✕
-                  </Badge>
-                ))}
-              </div>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                    <FormControl>
+                      <SelectTrigger className="focus:ring-orange-500">
+                        <SelectValue placeholder="Select events" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {suitableForOptions.map((opt) => (
+                        <SelectItem key={opt} value={opt}>
+                          {opt}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {field.value.map((item, idx) => (
+                      <Badge
+                        key={idx}
+                        onClick={() =>
+                          field.onChange(field.value.filter((v) => v !== item))
+                        }
+                        className="cursor-pointer bg-orange-100 text-orange-700 hover:bg-orange-200"
+                      >
+                        {item} ✕
+                      </Badge>
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        {/* Services (multi-select with badges) */}
-        <FormField
-          control={form.control}
-          name="services"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Services</FormLabel>
-              <Select
-                onValueChange={(val) =>
-                  !field.value.includes(val) &&
-                  field.onChange([...field.value, val])
-                }
-              >
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select services" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {servicesOptions.map((service) => (
-                    <SelectItem key={service} value={service}>
-                      {service}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <div className="flex flex-wrap gap-2 mt-2">
-                {field.value.map((item, idx) => (
-                  <Badge
-                    key={idx}
-                    onClick={() =>
-                      field.onChange(field.value.filter((v) => v !== item))
+            {/* Services */}
+            <FormField
+              control={form.control}
+              name="services"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-orange-700">Services</FormLabel>
+                  <Select
+                    onValueChange={(val) =>
+                      !field.value.includes(val) &&
+                      field.onChange([...field.value, val])
                     }
-                    className="cursor-pointer"
                   >
-                    {item} ✕
-                  </Badge>
-                ))}
-              </div>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                    <FormControl>
+                      <SelectTrigger className="focus:ring-orange-500">
+                        <SelectValue placeholder="Select services" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {servicesOptions.map((service) => (
+                        <SelectItem key={service} value={service}>
+                          {service}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {field.value.map((item, idx) => (
+                      <Badge
+                        key={idx}
+                        onClick={() =>
+                          field.onChange(field.value.filter((v) => v !== item))
+                        }
+                        className="cursor-pointer bg-orange-100 text-orange-700 hover:bg-orange-200"
+                      >
+                        {item} ✕
+                      </Badge>
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <div>
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Creating..." : "Create Place"}
-          </Button>
-        </div>
-      </form>
-    </Form>
+            <div className="text-center">
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="bg-orange-500 hover:bg-orange-600 text-white font-medium px-6 py-2 rounded-lg"
+              >
+                {isLoading ? "Creating..." : "Create Place"}
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
+    </div>
   );
 };
 

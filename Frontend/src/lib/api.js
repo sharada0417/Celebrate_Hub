@@ -17,6 +17,9 @@ export const api = createApi({
     getPlaces: builder.query({
       query: () => "places/",
     }),
+    getPlaceForSerchQuery: builder.query({
+      query: ({ query }) => `places/serch/retrieve?query=${query}`, // Corrected typo: search -> serch
+    }),
     getPlaceById: builder.query({
       query: (id) => `places/${id}`,
     }),
@@ -27,7 +30,6 @@ export const api = createApi({
         body: place,
       }),
     }),
-    // 🔹 New endpoint for chatbot
     sendMessage: builder.mutation({
       query: (messages) => ({
         url: "places/llm",
@@ -42,5 +44,6 @@ export const {
   useGetPlacesQuery,
   useGetPlaceByIdQuery,
   useCreatePlaceMutation,
+  useGetPlaceForSerchQueryQuery,
   useSendMessageMutation,
 } = api;

@@ -14,18 +14,24 @@ function Navigation() {
         </Link>
         
         <div className="hidden md:flex space-x-3 mr-5">
-          {user?.publicMetadata?.role === "data"  && (<Link to={`/places/create`} className="transition-colors hover:text-white">
+          {/* {user?.publicMetadata?.role === "data"  && ( */}
+            <Link to={`/places/create`} className="transition-colors hover:text-white">
             Create Place
-          </Link>)}
+          </Link>         
+          
+             {/* )} */}
           
           
         </div>
         <div className="hidden md:flex space-x-3 mr-5">
           <Link to={`/aboutus`} className="transition-colors hover:text-white">
             About Us
-          </Link>
-          
-          
+          </Link>          
+        </div>
+        <div className="hidden md:flex space-x-3 mr-5">
+          <Link to={`/places`} className="transition-colors hover:text-white">
+            All places
+          </Link>          
         </div>
       </div>
       
