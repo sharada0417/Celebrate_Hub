@@ -5,6 +5,8 @@ import { isAdmin } from "./middleware/autherization";
 import { createEmbeddings } from "../application/embedding";
 import { retrive } from "../application/retrive";
 
+
+
 const placesRouter = express.Router();
 
 placesRouter.route("/").get(getAllPlaces).post(isAuthenticated, isAdmin,createPlace);

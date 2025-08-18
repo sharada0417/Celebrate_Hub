@@ -4,6 +4,7 @@ import NotFoundError from "../domain/errors/not-found-error";
 import ValidationError from "../domain/errors/validation-error";
 import { CreatePlaceDTO } from "../domain/dtos/place";
 import OpenAI from "openai";
+import stripe from "../infrastructure/stripe";
 
 export const  getAllPlaces = async (req : Request ,res :Response ,next :NextFunction) => {
     try {
@@ -33,26 +34,47 @@ export const getPlaceById = async (req : Request ,res :Response ,next :NextFunct
 
 export const createPlace = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const place = CreatePlaceDTO.safeParse(req.body);
+    const validationResult = CreatePlaceDTO.safeParse(req.body);
 
-    if(!place.success){
-        throw new ValidationError(place.error.message);
+    if(!validationResult.success){
+        res.status(400).json({
+            message:"Invalid place data",
+            errors:validationResult.error.format(),
+        });
+        return;
     }
 
+    const placeData = validationResult.data;
+
+    const stripeProduct = await stripe.products.create({
+        name:placeData.name,
+        description:placeData.description,
+        default_price_data:{
+            unit_amount : Math.round(parseFloat(placeData.price) * 100),
+            currency: "usd"
+        }
+    })
+
     // Add the place
-     await Place.create({
-      name: place.data.name,
-      location: place.data.location,
-      image: place.data.image,
-      description: place.data.description,
-      suitableFor: place.data.suitableFor,
-      price: parseInt(place.data.price),
-      services: place.data.services,
+     const place = new Place({
+      name: placeData.name,
+      location: placeData.location,
+      image: placeData.image,
+      description: placeData.description,
+      suitableFor: placeData.suitableFor,
+      price: parseInt(placeData.price),
+      services: placeData.services,
+      stripePriceId:stripeProduct.default_price
     });
 
-    res.status(201).send();
+    await place.save();
+    res.status(201).json(place);
   } catch (error) {
-    next(error);
+    console.error("Error Creating hotel:",error);
+    res.status(500).json({
+        message : "Failed to create place",
+        error: error instanceof Error ? error.message : String(error),
+    })
   }
 };
 

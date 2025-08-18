@@ -36,7 +36,11 @@ const placesSchema = new mongoose.Schema({
     services:[{
         type:String,
         required:true,
-    }]
+    }],
+    stripePriceId:{
+        type:String,
+        required:true
+    }
 })
 
 const Place = mongoose.model("Places",placesSchema);

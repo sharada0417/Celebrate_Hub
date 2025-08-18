@@ -8,7 +8,6 @@ const BookingSchema = new mongoose.Schema({
     },
     userId:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"User",
         required:true,
     },
     CheckIn:{
@@ -23,7 +22,17 @@ const BookingSchema = new mongoose.Schema({
         type: String,
         enum: ["Couple Party", "Crowd Party", "Mixed"],
         required: true
-    }]
+    }],
+    paymentStatus:{
+        type:String,
+        enum:["PENDING","PAID"],
+        default:"CARD"
+    },
+    paymentMethod:{
+        type:String,
+        enum:["CARD","BANK_TRANSFER"],
+        default:"CARD"
+    }
 })
 
 const Booking = mongoose.model("Booking",BookingSchema);
