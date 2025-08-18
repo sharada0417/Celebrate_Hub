@@ -69,22 +69,25 @@ const createCheckoutSession = async (req, res) => {
         if (!booking) {
             throw new Error("Booking not found");
         }
-        // Find the hotel separately
+        // Find the place separately
         const place = await places_1.default.findById(booking.placeId);
         if (!place) {
-            throw new Error("Hotel not found");
+            throw new Error("Place not found");
         }
         // Calculate number of nights
         const checkIn = new Date(booking.CheckIn);
         const checkOut = new Date(booking.CheckOut);
         const numberOfNights = Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
-        if (!place.stripePriceId) {
-            throw new Error("Stripe price ID is missing for this hotel");
-        }
         const session = await stripe_1.default.checkout.sessions.create({
             ui_mode: "embedded",
             line_items: [{
-                    price: place.stripePriceId,
+                    price_data: {
+                        currency: "usd",
+                        product_data: {
+                            name: place.name,
+                        },
+                        unit_amount: place.price * 100, // price per night in cents
+                    },
                     quantity: numberOfNights,
                 }],
             mode: "payment",
@@ -93,7 +96,7 @@ const createCheckoutSession = async (req, res) => {
                 bookingId: req.body.bookingId,
             },
         });
-        res.send({ clientSecret: session.client_secret });
+        res.send({ client_secret: session.client_secret }); // Changed to standard format { client_secret }
     }
     catch (error) {
         console.error("Error creating checkout session:", error);
@@ -112,12 +115,12 @@ const retrieveSessionStatus = async (req, res) => {
     }
     const place = await places_1.default.findById(booking.placeId);
     if (!place) {
-        throw new Error("Hotel not found");
+        throw new Error("Place not found");
     }
     res.status(200).json({
         bookingId: booking._id,
         booking: booking,
-        hotel: place,
+        place: place,
         status: checkoutSession.status,
         customer_email: checkoutSession.customer_details?.email,
         paymentStatus: booking.paymentStatus,
