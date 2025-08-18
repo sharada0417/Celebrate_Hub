@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import util from "util";
 import Booking from "../infrastructure/schemas/Booking";
 import stripe from "../infrastructure/stripe";
-import Hotel from "../infrastructure/schemas/places";
+import Places from "../infrastructure/schemas/places";
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET as string;
 const FRONTEND_URL = process.env.FRONTEND_URL as string;
@@ -81,10 +81,10 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
       throw new Error("Booking not found");
     }
 
-    // Find the hotel separately
-    const place = await Hotel.findById(booking.placeId);
+    // Find the place separately
+    const place = await Places.findById(booking.placeId);
     if (!place) {
-      throw new Error("Hotel not found");
+      throw new Error("Place not found");
     }
 
     // Calculate number of nights
@@ -92,14 +92,16 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
     const checkOut = new Date(booking.CheckOut);
     const numberOfNights = Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
 
-    if (!place.stripePriceId) {
-      throw new Error("Stripe price ID is missing for this hotel");
-    }
-
     const session = await stripe.checkout.sessions.create({
       ui_mode: "embedded",
       line_items: [{
-        price: place.stripePriceId,
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: place.name,
+          },
+          unit_amount: place.price * 100, // price per night in cents
+        },
         quantity: numberOfNights,
       }],
       mode: "payment",
@@ -109,7 +111,7 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
       },
     });
 
-    res.send({ clientSecret: session.client_secret });
+    res.send({ client_secret: session.client_secret }); // Changed to standard format { client_secret }
   } catch (error) {
     console.error("Error creating checkout session:", error);
     res.status(500).json({ 
@@ -128,15 +130,15 @@ export const retrieveSessionStatus = async (req: Request, res: Response) => {
   if (!booking) {
     throw new Error("Booking not found");
   }
-  const place = await Hotel.findById(booking.placeId);
+  const place = await Places.findById(booking.placeId);
   if (!place) {
-    throw new Error("Hotel not found");
+    throw new Error("Place not found");
   }
 
   res.status(200).json({
     bookingId: booking._id,
     booking: booking,
-    hotel: place,
+    place : place,
     status: checkoutSession.status,
     customer_email: checkoutSession.customer_details?.email,
     paymentStatus: booking.paymentStatus,

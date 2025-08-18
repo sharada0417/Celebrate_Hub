@@ -1,12 +1,29 @@
 import { Skeleton } from '@/components/ui/skeleton';
-import { useGetPlaceByIdQuery } from '@/lib/api';
+import { useCreateBookingMutation, useGetPlaceByIdQuery } from '@/lib/api';
 import React from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { CheckCircle } from "lucide-react";
+import { BookingDialog } from '@/components/BookingDailog';
+import { toast } from 'sonner';
 
 const Placepage = () => {
   const { id } = useParams();
   const { data: place, isLoading, isError, error } = useGetPlaceByIdQuery(id);
+  const [createBooking,{isLoading:isCreateBookingLoading}] = useCreateBookingMutation();
+
+  const navigate = useNavigate();
+
+    const handleBook = async (bookingData) => {
+    try {
+      const booking = await createBooking(bookingData).unwrap();
+      // navigate to payment page with booking id
+      navigate(`/booking/payment?bookingId=${booking._id}`);
+      // Removed toast.success here; success message now only on complete page after payment
+    } catch (error) {
+      console.log(error);
+      toast.error("Booking failed");
+    }
+  }
 
   // Loading state
   if (isLoading)
@@ -96,9 +113,12 @@ const Placepage = () => {
             <p className="text-2xl font-bold text-orange-700">
               ${place.price}
             </p>
-            <button className="bg-orange-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-orange-600 transition">
-              Book Now
-            </button>
+            <BookingDialog
+            placeName={place.name}
+            placeId={id}
+            onSubmit={handleBook}
+            isLoading={isCreateBookingLoading}
+            />
           </div>
         </div>
       </div>

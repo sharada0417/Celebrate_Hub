@@ -19,6 +19,8 @@ import CreatePlaceForm from "./components/CreatePlaceForm";
 import CreatePlacePage from "./pages/create-place.page";
 import AdminProtectedLayout from "./Layout/admin-layout";
 import AboutUsPage from "./pages/aboutus.page";
+import PaymentPage from "./pages/payment.page";
+import CompletePage from "./pages/complete.place";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -43,6 +45,8 @@ createRoot(document.getElementById("root")).render(
               {/* Protected routes */}
               <Route element={<ProtectedLayout />}>
                 <Route path="/account" element={<AccountPage />} />
+                <Route path="/booking/payment" element={<PaymentPage/>}/>
+                <Route path="/booking/complete" element={<CompletePage/>}/>
                 {/* <Route element={<AdminProtectedLayout/>}> */}
                 <Route path="/places/create" element={<CreatePlacePage/>} />
                 {/* </Route> */}
