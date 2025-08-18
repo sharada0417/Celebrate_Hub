@@ -1,6 +1,8 @@
 import express, { Application } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import 'dotenv/config';
+
 import ConnectedDB from "./infrastructure/db";
 import placesRouter from "./api/places";
 import bookingRouter from "./api/booking";

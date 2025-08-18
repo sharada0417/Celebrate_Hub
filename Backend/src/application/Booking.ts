@@ -13,19 +13,21 @@ export const createBooking = async (req: Request, res: Response, next: NextFunct
       throw new ValidationError(booking.error.message);
     }
 
-    const user = req.auth;
-    
+    // Narrow auth so TypeScript knows userId exists
+    const auth = req.auth as { userId?: string } | undefined;
+    if (!auth?.userId) {
+      throw new ValidationError("User not authenticated");
+    }
 
-    // Add the booking
+    // Add the booking (store userId as string)
     const newBooking = await Booking.create({
       placeId: booking.data.placeId,
-      userId: user.userId,
+      userId: auth.userId,
       CheckIn: booking.data.CheckIn,
       CheckOut: booking.data.CheckOut,
       PartyType: booking.data.PartyType,
     });
 
-    // Return the response
     res.status(201).json(newBooking);
   } catch (error) {
     next(error);
@@ -39,7 +41,8 @@ export const getAllBookingForPlace = async (req: Request, res: Response, next: N
 
     const bookingsWithUser = await Promise.all(
       booking.map(async (el) => {
-        const user = await clerkClient.users.getUser(el.userId);
+        // el.userId is now a string (Clerk user id)
+        const user = await clerkClient.users.getUser(el.userId as unknown as string);
         return {
           _id: el._id,
           placeId: el.placeId,
@@ -70,16 +73,12 @@ export const getAllBookings = async (req: Request, res: Response, next: NextFunc
   }
 };
 
-export const getBookingById = async(
-  req:Request,
-  res:Response,
-  next:NextFunction
-) => {
+export const getBookingById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const bookingId = req.params.bookingId;
     const booking = await Booking.findById(bookingId);
 
-    if(!booking){
+    if (!booking) {
       throw new NotFoundError("Booking not found");
     }
     res.status(200).json(booking);
@@ -87,4 +86,4 @@ export const getBookingById = async(
   } catch (error) {
     next(error);
   }
-}
+};
